@@ -2,6 +2,7 @@ import logging
 import time
 from sqlalchemy import create_engine, text
 from sqlalchemy.engine.url import make_url
+from sqlalchemy.pool import NullPool
 from sqlalchemy.orm import sessionmaker, declarative_base
 from sqlalchemy.exc import OperationalError
 from app.config import settings
@@ -14,8 +15,7 @@ _db_target = make_url(database_url)
 engine = create_engine(
     database_url,
     echo=False,
-    pool_size=1,
-    max_overflow=0,
+    poolclass=NullPool,
     pool_pre_ping=True,
     pool_recycle=900,
     connect_args={
