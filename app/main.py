@@ -4,11 +4,16 @@ from app.config import settings
 from app.database.session import init_db
 from app.routes import employees, attendance
 
-# Initialize database
-init_db()
-
 # Create FastAPI app
 app = FastAPI(title=settings.app_name, debug=settings.debug)
+
+# Initialize database on startup
+@app.on_event("startup")
+async def startup_event():
+    try:
+        init_db()
+    except Exception as e:
+        print(f"Database initialization warning: {e}")
 
 # Add CORS middleware
 app.add_middleware(
