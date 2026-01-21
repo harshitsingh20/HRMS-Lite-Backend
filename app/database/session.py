@@ -20,7 +20,7 @@ engine = create_engine(
     pool_recycle=900,
     connect_args={
         "sslmode": "require",
-        "connect_timeout": 30,
+        "connect_timeout": 5,
         "keepalives": 1,
         "keepalives_idle": 30,
     },
@@ -37,7 +37,7 @@ def get_db():
         db.close()
 
 
-def _ensure_db_ready(max_attempts: int = 10, delay_seconds: int = 6) -> None:
+def _ensure_db_ready(max_attempts: int = 3, delay_seconds: int = 2) -> None:
     """Try connecting a few times before giving up."""
     for attempt in range(1, max_attempts + 1):
         try:
@@ -56,12 +56,13 @@ def _ensure_db_ready(max_attempts: int = 10, delay_seconds: int = 6) -> None:
             if attempt == max_attempts:
                 logger.error(
                     "Unable to reach database at %s:%s after %s attempts. "
-                    "Verify network egress, IP allowlist/VPC settings, and credentials.",
+                    "Continuing startup without DB connection; verify network "
+                    "egress, IP allowlist/VPC settings, and credentials.",
                     _db_target.host,
                     _db_target.port,
                     max_attempts,
                 )
-                raise
+                return
             time.sleep(delay_seconds * attempt)
 
 
