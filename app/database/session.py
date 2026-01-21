@@ -18,7 +18,7 @@ engine = create_engine(
     pool_recycle=900,
     connect_args={
         "sslmode": "require",
-        "connect_timeout": 15,
+        "connect_timeout": 20,
         "keepalives": 1,
         "keepalives_idle": 30,
     },
@@ -35,7 +35,7 @@ def get_db():
         db.close()
 
 
-def _ensure_db_ready(max_attempts: int = 5, delay_seconds: int = 5) -> None:
+def _ensure_db_ready(max_attempts: int = 8, delay_seconds: int = 5) -> None:
     """Try connecting a few times before giving up."""
     for attempt in range(1, max_attempts + 1):
         try:
