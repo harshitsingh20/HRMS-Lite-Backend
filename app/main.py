@@ -21,6 +21,8 @@ app.add_middleware(
     allow_origins=[
         "http://localhost:3000",
         "https://hrms-lite-frontend-navy.vercel.app",
+        "https://hrms-lite-frontend-git-master-harshitsingh2035-2411s-projects.vercel.app",
+        "https://hrms-lite-frontend-2fuko3j5k-harshitsingh2035-2411s-projects.vercel.app",
     ],
     allow_credentials=True,
     allow_methods=["*"],

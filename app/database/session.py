@@ -16,8 +16,6 @@ engine = create_engine(
     database_url,
     echo=False,
     poolclass=NullPool,
-    pool_pre_ping=True,
-    pool_recycle=900,
     connect_args={
         "sslmode": "require",
         "connect_timeout": 5,
@@ -68,5 +66,8 @@ def _ensure_db_ready(max_attempts: int = 3, delay_seconds: int = 2) -> None:
 
 def init_db():
     """Initialize database tables"""
-    _ensure_db_ready()
-    Base.metadata.create_all(bind=engine)
+    try:
+        _ensure_db_ready()
+        Base.metadata.create_all(bind=engine)
+    except Exception as exc:
+        logger.error("Database initialization failed: %s", exc)
